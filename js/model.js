@@ -47,7 +47,7 @@ export async function generateWithModel(messages, onProgress) {
     temperature: 0.45,
     top_p: 0.85,
     top_k: 40,
-    max_tokens: 220
+    max_tokens: 512
   });
 
   if (typeof response === "string") return response.trim();
