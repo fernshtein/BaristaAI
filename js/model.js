@@ -1,8 +1,6 @@
 import { Wllama } from "@wllama/wllama";
 import wasmUrl from "@wllama/wllama/esm/wasm/wllama.wasm?url";
 
-// Wllama v3: WASM берётся из установленного npm-пакета,
-// а GGUF — из public/models. Vite отдаёт public по корню сайта.
 const WASM_PATHS = {
   default: wasmUrl
 };

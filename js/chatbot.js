@@ -1,8 +1,5 @@
-
 import { generateWithModel } from "./model.js";
 import { menu, categoryLabels } from "./menu.js";
-
-/* Нормализация текста */
 
 function normalize(value = "") {
   return String(value)
@@ -11,17 +8,11 @@ function normalize(value = "") {
     .trim();
 }
 
-/* Проверяем, выбрал ли пользователь предпочтение «Без молока» */
-
 function hasNoMilkPreference(text, tastes = []) {
   const value = normalize(`${text} ${tastes.join(" ")}`);
 
   return /без молока|без сливок|безмолоч|не хочу молок|не пью молок|не ем молок/.test(value);
 }
-
-/* Проверяем состав товара.
-   Важно: смотрим именно ingredients, чтобы слово «без молока»
-   в тегах не приводило к ошибочному определению состава. */
 
 function containsMilk(item) {
   const ingredients = normalize(item.ingredients || "");
@@ -29,15 +20,11 @@ function containsMilk(item) {
   return /молок|сливк|молочн|сгущенн/.test(ingredients);
 }
 
-/* Каталог для нейросети */
-
 function createCatalog(items) {
   return items.map(item =>
     `${item.name} (${categoryLabels[item.category]}) — ${item.price} ₽. ${item.description} Вкус: ${item.taste} Состав: ${item.ingredients}.`
   ).join("\n");
 }
-
-/* Системная инструкция */
 
 function createSystemPrompt(items, noMilk) {
   const catalogText = createCatalog(items);
@@ -97,13 +84,9 @@ function isGreeting(text) {
   return /^(привет|здравствуйте|здравствуй|добрый день|доброе утро|добрый вечер|хай)[!. ]*$/i.test(text.trim());
 }
 
-/* Проверяем, действительно ли пользователь просит рекомендацию */
-
 function wantsRecommendation(text) {
   return /посовет|рекоменд|подбер|помоги выбрать|помоги подобрать|что выбрать|что взять|что попробовать|что посоветуешь|какой кофе|какой напиток|какой чай|какое кофе|предложи|подходит ли мне|подойдет ли мне|хочу попробовать|что к десерту|что к кофе|что к чаю/i.test(text);
 }
-
-/* Текстовые характеристики позиции меню */
 
 function getItemText(item) {
   return normalize([
@@ -114,8 +97,6 @@ function getItemText(item) {
     ...(Array.isArray(item.tags) ? item.tags : [])
   ].join(" "));
 }
-
-/* Убираем повторяющиеся позиции */
 
 function uniqueItems(items) {
   const seen = new Set();
@@ -129,8 +110,6 @@ function uniqueItems(items) {
     return true;
   });
 }
-
-/* Проверяем, соответствует ли товар вкусовым предпочтениям */
 
 function getPreferenceScore(item, tastes = [], text = "") {
   const preferences = normalize(`${tastes.join(" ")} ${text}`);
@@ -169,8 +148,6 @@ function getPreferenceScore(item, tastes = [], text = "") {
   return score;
 }
 
-/* Подбор товаров с учётом категории и предпочтений */
-
 function chooseRecommendations(text, tastes = [], answer = "") {
   const q = normalize(`${text} ${tastes.join(" ")}`);
   const noMilk = hasNoMilkPreference(text, tastes);
@@ -191,14 +168,9 @@ function chooseRecommendations(text, tastes = [], answer = "") {
     candidates = candidates.filter(item => item.category === "coffee");
   }
 
-  /* Строго исключаем молочные позиции */
-
   if (noMilk) {
     candidates = candidates.filter(item => !containsMilk(item));
   }
-
-  /* Если пользователь хочет напиток с молоком,
-     сначала рассматриваем позиции с молоком */
 
   const wantsMilk = /с молоком|молочн|сливочн/.test(q) && !noMilk;
 
@@ -210,8 +182,6 @@ function chooseRecommendations(text, tastes = [], answer = "") {
     }
   }
 
-  /* Сортируем товары по соответствию предпочтениям */
-
   candidates = candidates
     .map((item, index) => ({
       item,
@@ -220,9 +190,6 @@ function chooseRecommendations(text, tastes = [], answer = "") {
     }))
     .sort((a, b) => b.score - a.score || a.index - b.index)
     .map(entry => entry.item);
-
-  /* Учитываем позиции, названные нейросетью,
-     но не возвращаем товары, нарушающие ограничения */
 
   const normalizedAnswer = normalize(answer);
 
@@ -236,8 +203,6 @@ function chooseRecommendations(text, tastes = [], answer = "") {
 
   return uniqueItems(candidates).slice(0, 3);
 }
-
-/* Создаём гарантированно подходящий ответ для запроса без молока */
 
 function createNoMilkAnswer(recommendations) {
   if (!recommendations.length) {
@@ -306,8 +271,6 @@ export class Chatbot {
     const noMilk = hasNoMilkPreference(userText, tastes);
     const recommendationRequest = wantsRecommendation(userText);
 
-    /* Для запроса без молока используем только разрешённые товары */
-
     if (noMilk && recommendationRequest) {
       const recommendations = chooseRecommendations(userText, tastes);
 
@@ -325,8 +288,6 @@ export class Chatbot {
         recommendations
       };
     }
-
-    /* Передаём модели предпочтения пользователя */
 
     const tasteContext = tastes.length
       ? `Предпочтения пользователя: ${tastes.join(", ")}. Обязательно учитывай их при подборе товаров.`

@@ -1,4 +1,3 @@
-
 import { Chatbot } from "./chatbot.js";
 import { menu, menuCategories, categoryLabels } from "./menu.js";
 
@@ -127,7 +126,6 @@ async function sendMessage(value = state.input) {
 
   if (!text || state.loading) return;
 
-  // Запоминаем положение прокрутки до перерисовки.
   const chatBody = app.querySelector(".chat-body");
   const wasNearBottom = chatBody
     ? chatBody.scrollHeight - chatBody.clientHeight - chatBody.scrollTop < 60
@@ -572,13 +570,11 @@ function render(options = {}) {
       `}
     </aside>
   </main>`;
-    // Анимация открытия используется только при первом появлении чата.
   state.animateChatOpen = false;
 
   bindEvents();
   initScrollAnimations();
 
-  // Восстанавливаем прокрутку после обновления интерфейса.
   const nextChatBody = app.querySelector(".chat-body");
 
   if (nextChatBody && state.open && state.name && state.messages.length) {

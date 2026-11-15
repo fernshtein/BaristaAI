@@ -1,9 +1,4 @@
-
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap");
-
-/* ==============================
-   ОСНОВНЫЕ НАСТРОЙКИ
-============================== */
 
 :root {
     color: #171717;
@@ -51,10 +46,6 @@ button {
     background: #fff;
     overflow-x: clip;
 }
-
-/* ==============================
-   ШАПКА САЙТА
-============================== */
 
 .site-header {
     height: 88px;
@@ -128,10 +119,6 @@ button {
     border-radius: 10px;
     place-items: center;
 }
-
-/* ==============================
-   ГЛАВНЫЙ ЭКРАН
-============================== */
 
 .hero {
     min-height: 0;
@@ -249,10 +236,6 @@ button {
     font-size: 23px;
     font-weight: 500;
 }
-
-/* ==============================
-   МЕНЮ
-============================== */
 
 .menu-preview {
     padding: 76px 7vw 100px;
@@ -386,10 +369,6 @@ button {
     line-height: 1.5;
 }
 
-/* ==============================
-   О ПРОЕКТЕ
-============================== */
-
 .about-section {
     padding: 100px 24px;
     background: #f5f5f5;
@@ -414,10 +393,6 @@ button {
     font-size: 15px;
     line-height: 1.8;
 }
-
-/* ==============================
-   ВЫДВИЖНОЙ ЧАТ
-============================== */
 
 .overlay {
     position: fixed;
@@ -495,10 +470,6 @@ button {
 .mobile-chat-trigger {
     display: none;
 }
-
-/* ==============================
-   ШАПКА ЧАТА
-============================== */
 
 .chat-header {
     height: 84px;
@@ -616,10 +587,6 @@ button {
     background: var(--soft);
 }
 
-/* ==============================
-   ПРИВЕТСТВИЕ И ВВОД ИМЕНИ
-============================== */
-
 .welcome {
     flex: 1;
     padding: 65px 38px 30px;
@@ -724,10 +691,6 @@ button {
     font-size: 9px;
     margin-top: 30px;
 }
-
-/* ==============================
-   ОБЛАСТЬ ПЕРЕПИСКИ
-============================== */
 
 .chat-body {
     flex: 1;
@@ -836,11 +799,6 @@ button {
     background: var(--soft);
 }
 
-
-/* ==============================
-   СООБЩЕНИЯ ПОЛЬЗОВАТЕЛЯ И ИИ
-============================== */
-
 .messages {
     display: flex;
     flex-direction: column;
@@ -874,8 +832,6 @@ button {
     justify-content: flex-start;
 }
 
-/* Контейнер сообщения */
-
 .message-content {
     display: flex;
     flex-direction: column;
@@ -887,15 +843,11 @@ button {
     height: auto;
 }
 
-/* Контейнер пользователя */
-
 .message.user .message-content {
     align-items: flex-end;
     max-width: 78%;
     margin-left: auto;
 }
-
-/* Аватар ИИ */
 
 .tiny-avatar {
     width: 24px;
@@ -909,8 +861,6 @@ button {
     display: grid;
     place-items: center;
 }
-
-/* Рамки сообщений */
 
 .message .bubble {
     display: block;
@@ -940,16 +890,12 @@ button {
     box-sizing: border-box;
 }
 
-/* Сообщение пользователя */
-
 .message.user .bubble {
     background: #171717;
     color: #fff;
     border-color: #171717;
     border-radius: 12px 12px 3px 12px;
 }
-
-/* Сообщение ИИ */
 
 .message.assistant .bubble {
     background: #fff;
@@ -958,15 +904,11 @@ button {
     border-radius: 12px 12px 12px 3px;
 }
 
-/* Ошибки */
-
 .error-bubble {
     border-color: #d7d7d7 !important;
     background: #fff !important;
     color: #333 !important;
 }
-
-/* Индикатор набора текста */
 
 .typing {
     display: flex !important;
@@ -994,8 +936,6 @@ button {
     animation-delay: 0.28s;
 }
 
-/* Кнопка повторной отправки */
-
 .retry-button {
     border: 0;
     background: none;
@@ -1008,8 +948,6 @@ button {
     font-size: 10px;
 }
 
-/* Маленькие экраны */
-
 @media (max-width: 480px) {
     .message-content {
         max-width: calc(100% - 32px);
@@ -1019,11 +957,6 @@ button {
         max-width: 82%;
     }
 }
-
-
-/* ==============================
-   РЕКОМЕНДАЦИИ НАПИТКОВ В ЧАТЕ
-============================== */
 
 .recommendations {
     display: grid;
@@ -1125,7 +1058,6 @@ button {
     letter-spacing: 0.08em;
 }
 
-
 .context-chips {
     display: flex;
     flex-wrap: wrap;
@@ -1154,11 +1086,6 @@ button {
     background: #f5f5f5;
     border-color: #aaa;
 }
-
-
-/* ==============================
-   ПОЛЕ ВВОДА СООБЩЕНИЯ
-============================== */
 
 .chat-input-area {
     padding: 13px 16px 14px;
@@ -1213,10 +1140,6 @@ button {
     font-size: 8px;
 }
 
-/* ==============================
-   АНИМАЦИИ
-============================== */
-
 @keyframes bounce {
     0%, 60%, 100% {
         transform: translateY(0);
@@ -1241,10 +1164,6 @@ button {
         transform: translateY(6px);
     }
 }
-
-/* ==============================
-   ПЛАНШЕТЫ
-============================== */
 
 @media (max-width: 900px) {
     .site-header nav {
@@ -1272,10 +1191,6 @@ button {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
-
-/* ==============================
-   ТЕЛЕФОНЫ
-============================== */
 
 @media (max-width: 700px) {
     .site-header {
@@ -1373,10 +1288,6 @@ button {
     }
 }
 
-/* ==============================
-   МАЛЕНЬКИЕ ЭКРАНЫ
-============================== */
-
 @media (max-width: 480px) {
     .chat-drawer {
         border-radius: 0;
@@ -1400,8 +1311,6 @@ button {
         max-width: 100%;
     }
 
-    /* На узком экране пузырьки не выходят за границы чата */
-
     .message-content {
         max-width: 82%;
     }
@@ -1411,7 +1320,6 @@ button {
     }
 }
 
-/* Фото на главном экране */
 .hero-image {
     width: 100% !important;
     max-width: 520px !important;
@@ -1472,10 +1380,6 @@ button {
         margin: 20px auto !important;
     }
 }
-
-/* ==============================
-   УВЕДОМЛЕНИЕ ОБ ИИ-БАРИСТЕ
-============================== */
 
 .bot-notice {
     position: fixed;
@@ -1615,14 +1519,6 @@ button {
     }
 }
 
-/* =====================================
-   ОБЩИЕ АНИМАЦИИ BREW & BEAN
-===================================== */
-
-/* Появление главного экрана */
-
-/* Анимация главного экрана только при первой загрузке */
-
 #app.initial-load .hero-copy {
     animation: heroTextIn 0.8s cubic-bezier(0.2, 0.7, 0.3, 1) both;
 }
@@ -1653,10 +1549,6 @@ button {
     }
 }
 
-/* Плавное появление чата при открытии */
-
-/* Анимация чата только при настоящем открытии */
-
 .chat-drawer.opening {
     animation: chatPanelIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -1681,8 +1573,6 @@ button {
     to { opacity: 1; }
 }
 
-/* Появление новых сообщений */
-
 .message-latest {
     animation: messageIn 0.35s ease both;
 }
@@ -1697,8 +1587,6 @@ button {
         transform: translateY(0);
     }
 }
-
-/* Анимация карточек меню */
 
 .menu-card,
 .drink-card {
@@ -1723,8 +1611,6 @@ button {
     transform: scale(1.04);
 }
 
-/* Плавные реакции кнопок */
-
 button:not(:disabled),
 .primary-link {
     transition:
@@ -1739,8 +1625,6 @@ button:not(:disabled):active,
     transform: scale(0.97);
 }
 
-/* Появление блоков при прокрутке */
-
 .scroll-reveal {
     opacity: 0;
     transform: translateY(22px);
@@ -1754,8 +1638,6 @@ button:not(:disabled):active,
     transform: translateY(0);
 }
 
-/* Небольшая задержка появления карточек */
-
 .menu-grid .menu-card:nth-child(2) {
     transition-delay: 0.06s;
 }
@@ -1767,8 +1649,6 @@ button:not(:disabled):active,
 .menu-grid .menu-card:nth-child(4) {
     transition-delay: 0.18s;
 }
-
-/* Учитываем настройки пользователя, отключающего анимации */
 
 @media (prefers-reduced-motion: reduce) {
     *,
@@ -1805,4 +1685,3 @@ button:not(:disabled):active,
     opacity: 0;
     pointer-events: none;
 }
-
