@@ -1,6 +1,8 @@
 import { generateWithModel } from "./model.js";
 import { menu, categoryLabels } from "./menu.js";
 
+// Утилиты нормализации и проверки текста
+
 function normalize(value = "") {
   return String(value)
     .toLowerCase()
@@ -20,12 +22,15 @@ function containsMilk(item) {
   return /молок|сливк|молочн|сгущенн/.test(ingredients);
 }
 
+// Формирование каталога и системного промпта
+
 function createCatalog(items) {
   return items.map(item =>
     `${item.name} (${categoryLabels[item.category]}) — ${item.price} ₽. ${item.description} Вкус: ${item.taste} Состав: ${item.ingredients}.`
   ).join("\n");
 }
 
+// Сборка системного промпта с ролью, каталогом и правилами
 function createSystemPrompt(items, noMilk) {
   const catalogText = createCatalog(items);
 
@@ -78,16 +83,24 @@ ${noMilk ? `
 `;
 }
 
+// Регулярные выражения и проверки намерений пользователя
+
+// Паттерн тематических слов
 const topicPattern = /коф|эспрессо|американо|капучино|латте|раф|мокк|макиато|кортадо|флэт|чай|матча|эрл|жасмин|ромаш|имбир|лимон|ягод|морс|лимонад|шоколад|десерт|торт|чизкейк|тирамису|брауни|круассан|фондан|выпеч|молок|сливк|сахар|сироп|вкус|аромат|горьк|сладк|кисл|крепк|кофеин|зерн|обжарк|помол|кофемашин|кофевар|приготов|завар|бариста|напит|меню|состав|ингредиент|посовет|рекоменд|выбрат|похож|покрепче|послаще/i;
 
+// Проверка, что сообщение - только приветствие
 function isGreeting(text) {
   return /^(привет|здравствуйте|здравствуй|добрый день|доброе утро|добрый вечер|хай)[!. ]*$/i.test(text.trim());
 }
 
+// Проверка, что пользователь просит рекомендацию
 function wantsRecommendation(text) {
   return /посовет|рекоменд|подбер|помоги выбрать|помоги подобрать|что выбрать|что взять|что попробовать|что посоветуешь|какой кофе|какой напиток|какой чай|какое кофе|предложи|подходит ли мне|подойдет ли мне|хочу попробовать|что к десерту|что к кофе|что к чаю/i.test(text);
 }
 
+// Работа с позициями меню
+
+// Собирает весь текст позиции
 function getItemText(item) {
   return normalize([
     item.name,
@@ -98,6 +111,7 @@ function getItemText(item) {
   ].join(" "));
 }
 
+// Удаляет дубликаты позиций по названию
 function uniqueItems(items) {
   const seen = new Set();
 
@@ -111,6 +125,9 @@ function uniqueItems(items) {
   });
 }
 
+// Скоринг и подбор рекомендаций
+
+// Начисляет баллы позиции за совпадение с вкусовыми предпочтениями
 function getPreferenceScore(item, tastes = [], text = "") {
   const preferences = normalize(`${tastes.join(" ")} ${text}`);
   const itemText = getItemText(item);
@@ -154,6 +171,7 @@ function chooseRecommendations(text, tastes = [], answer = "") {
 
   let candidates = uniqueItems(menu);
 
+  // Определение категории по запросу
   const asksTea = /чай|матча|эрл грей|ромашк|жасмин/.test(q);
   const asksDessert = /десерт|торт|чизкейк|тирамису|брауни|круассан|выпечк|к чаю|к кофе/.test(q);
   const asksCoffee = /кофе|эспрессо|латте|капучино|американо|раф|мокк/.test(q);
@@ -182,6 +200,7 @@ function chooseRecommendations(text, tastes = [], answer = "") {
     }
   }
 
+  // Сортировка по скорингу предпочтений
   candidates = candidates
     .map((item, index) => ({
       item,
@@ -204,6 +223,8 @@ function chooseRecommendations(text, tastes = [], answer = "") {
   return uniqueItems(candidates).slice(0, 3);
 }
 
+// Готовые ответы
+
 function createNoMilkAnswer(recommendations) {
   if (!recommendations.length) {
     return "Я учёл твоё предпочтение «Без молока». В выбранной категории пока не нашлось подходящих позиций. Попробуй выбрать другую категорию напитков.";
@@ -216,6 +237,7 @@ function createNoMilkAnswer(recommendations) {
   return `Учёл твоё предпочтение «Без молока» и исключил напитки с молоком и сливками. Вот что могу предложить:\n\n${itemsText}`;
 }
 
+// Ответ на случай сбоя генерации
 function fallbackAnswer() {
   return {
     text: "Сейчас не удалось подготовить подробный ответ. Попробуй задать вопрос ещё раз.",
@@ -223,12 +245,15 @@ function fallbackAnswer() {
   };
 }
 
+// Класс чат-бота
+
 export class Chatbot {
   constructor() {
     this.history = [];
     this.drinks = menu;
   }
 
+  // Загружает историю диалога
   setHistory(messages = []) {
     this.history = messages
       .filter(message => message && ["user", "assistant"].includes(message.role))
@@ -240,6 +265,7 @@ export class Chatbot {
       .slice(-12);
   }
 
+  // Сбрасывает историю диалога
   clearHistory() {
     this.history = [];
   }
@@ -254,6 +280,7 @@ export class Chatbot {
       };
     }
 
+    // Первый запрос не по теме и не приветствие — редирект на тему кофе
     if (!this.history.length && !isGreeting(userText) && !topicPattern.test(userText)) {
       const redirect = "Я ИИ-бариста Brew & Bean и специализируюсь на кофе, чае, напитках и десертах. Давай подберём что-нибудь вкусное!";
 
@@ -289,6 +316,7 @@ export class Chatbot {
       };
     }
 
+    // Контекст предпочтений и намерения для промпта
     const tasteContext = tastes.length
       ? `Предпочтения пользователя: ${tastes.join(", ")}. Обязательно учитывай их при подборе товаров.`
       : "Пока предпочтения пользователя не указаны.";
@@ -303,6 +331,7 @@ export class Chatbot {
 
     const systemPrompt = createSystemPrompt(promptMenu, noMilk);
 
+    // Финальный набор сообщений: системный промпт + история + текущий запрос
     const messages = [
       {
         role: "system",
@@ -312,6 +341,7 @@ export class Chatbot {
       { role: "user", content: userText }
     ];
 
+    // Вызов модели с обработкой ошибок и обновлением истории
     try {
       const generated = await generateWithModel(messages);
       const answer = String(generated || "").trim();
@@ -325,6 +355,7 @@ export class Chatbot {
 
       this.history = this.history.slice(-12);
 
+      // Рекомендации подбираются только если пользователь их просил
       const recommendations = recommendationRequest
         ? chooseRecommendations(userText, tastes, resultText)
         : [];
