@@ -193,7 +193,11 @@ function editName() {
 function renderDrink(item) {
   return `<article class="menu-card">
     <div class="menu-card-image">
-      <img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.name)}" loading="lazy">
+      <img
+        src="${escapeHTML(item.image)}"
+        alt="${escapeHTML(item.name)}"
+        loading="lazy"
+        decoding="async">
       <span class="menu-card-category">${escapeHTML(categoryLabels[item.category])}</span>
     </div>
     <div class="menu-card-content">
@@ -274,31 +278,38 @@ function renderMenu() {
     </div>`;
 }
 
+let scrollObserver = null;
+
 function initScrollAnimations() {
+  scrollObserver?.disconnect();
+  scrollObserver = null;
+
   const elements = app.querySelectorAll(
-    ".menu-preview, .about-section, .menu-card"
+    ".menu-preview, .about-section"
   );
 
   if (!("IntersectionObserver" in window)) {
-    elements.forEach(element => element.classList.add("is-visible"));
+    elements.forEach(element => {
+      element.classList.add("is-visible");
+    });
     return;
   }
 
-  const observer = new IntersectionObserver((entries, currentObserver) => {
+  scrollObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add("is-visible");
-        currentObserver.unobserve(entry.target);
+        observer.unobserve(entry.target);
       }
     });
   }, {
-    threshold: 0.12,
-    rootMargin: "0px 0px -35px 0px"
+    threshold: 0.05,
+    rootMargin: "100px 0px"
   });
 
   elements.forEach(element => {
     element.classList.add("scroll-reveal");
-    observer.observe(element);
+    scrollObserver.observe(element);
   });
 }
 

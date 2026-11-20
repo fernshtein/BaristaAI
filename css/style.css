@@ -313,8 +313,6 @@ button {
     height: 100%;
     object-fit: cover;
     display: block;
-    filter: grayscale(1);
-    transition: transform 0.3s;
 }
 
 .menu-card:hover .menu-card-image img {
@@ -402,8 +400,7 @@ button {
     background: rgba(17, 17, 17, 0.32);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.35s;
-    backdrop-filter: blur(5px);
+    transition: opacity 0.2s;
 }
 
 .overlay.visible {
@@ -1013,7 +1010,6 @@ button {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: grayscale(1);
 }
 
 .drink-copy {
@@ -1588,17 +1584,16 @@ button {
     }
 }
 
+/* Облегчённая отрисовка карточек */
 .menu-card,
 .drink-card {
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
+    transition: none;
 }
 
 .menu-card:hover,
 .drink-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+    transform: none;
+    box-shadow: none;
 }
 
 .menu-card-image img,
@@ -1684,4 +1679,113 @@ button:not(:disabled):active,
 .overlay.closing {
     opacity: 0;
     pointer-events: none;
+}
+
+/* Исправление мобильного меню и производительности */
+
+@media (max-width: 700px) {
+
+    /* Не скрываем секции и карточки в ожидании анимации */
+    .scroll-reveal,
+    .scroll-reveal.is-visible {
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    /* Убираем тяжёлые эффекты карточек */
+    .menu-card,
+    .menu-card:hover {
+        transform: none !important;
+        transition: none !important;
+        box-shadow: none;
+    }
+
+    /* Отключаем увеличение изображений */
+    .menu-card-image img,
+    .menu-card:hover .menu-card-image img {
+        transform: none !important;
+        transition: none !important;
+    }
+
+    /* Не анимируем кнопки фильтрации */
+    .menu-filter {
+        transition: none !important;
+    }
+
+    /* Гарантируем отображение сетки */
+    .menu-preview,
+    .menu-grid {
+        display: block;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    .menu-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .menu-card {
+        width: 100%;
+    }
+}
+
+/* Оптимизация прокрутки и отрисовки меню */
+
+.menu-card {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 380px;
+}
+
+/* Карточки не анимируются при прокрутке */
+.menu-grid .menu-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+}
+
+/* Убираем задержки появления карточек */
+.menu-grid .menu-card:nth-child(2),
+.menu-grid .menu-card:nth-child(3),
+.menu-grid .menu-card:nth-child(4) {
+    transition-delay: 0s;
+}
+/* ВРЕМЕННАЯ ДИАГНОСТИКА ПРОИЗВОДИТЕЛЬНОСТИ */
+
+html {
+    scroll-behavior: auto !important;
+}
+
+.scroll-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+}
+
+.menu-card,
+.drink-card {
+    transition: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.menu-card:hover,
+.drink-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.menu-card-image img,
+.drink-photo img {
+    filter: none !important;
+    transition: none !important;
+}
+
+.overlay {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transition: none !important;
 }
